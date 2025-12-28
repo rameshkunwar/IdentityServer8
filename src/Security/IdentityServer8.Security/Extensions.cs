@@ -10,7 +10,7 @@
  copies or substantial portions of the Software.
 */
 
-namespace Microsoft.Extensions.DependencyInjection;
+namespace IdentityServer8.Security;
 
 public class Ioc
 {

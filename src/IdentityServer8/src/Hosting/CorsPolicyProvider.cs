@@ -10,6 +10,8 @@
  copies or substantial portions of the Software.
 */
 
+using IdentityServer8.Security;
+
 namespace IdentityServer8.Hosting;
 
 internal class CorsPolicyProvider : ICorsPolicyProvider

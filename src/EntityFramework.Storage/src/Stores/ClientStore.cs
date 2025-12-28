@@ -11,6 +11,7 @@
 */
 
 using IdentityServer8.Models;
+using IdentityServer8.Security;
 
 namespace IdentityServer8.EntityFramework.Stores
 {
