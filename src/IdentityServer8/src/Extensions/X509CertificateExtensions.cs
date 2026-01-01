@@ -11,6 +11,8 @@
 */
 
 using JsonSerializer = System.Text.Json.JsonSerializer;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 
 namespace IdentityServer8.Extensions;
 
@@ -26,11 +28,11 @@ public static class X509CertificateExtensions
     /// <returns></returns>
     public static string CreateThumbprintCnf(this X509Certificate2 certificate)
     {
-        var hash = certificate.GetCertHash(HashAlgorithmName.SHA256);
+        var hash = certificate.GetCertHashString(HashAlgorithmName.SHA256);
                         
         var values = new Dictionary<string, string>
         {
-            { "x5t#S256", Base64Url.Encode(hash) }
+            { "x5t#S256", hash }
         };
 
         return JsonSerializer.Serialize(values);

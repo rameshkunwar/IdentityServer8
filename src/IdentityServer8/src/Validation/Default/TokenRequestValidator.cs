@@ -10,6 +10,8 @@
  copies or substantial portions of the Software.
 */
 
+using System.Buffers.Text;
+
 namespace IdentityServer8.Validation;
 
 internal class TokenRequestValidator : ITokenRequestValidator
@@ -772,7 +774,7 @@ internal class TokenRequestValidator : ITokenRequestValidator
 
         var codeVerifierBytes = Encoding.ASCII.GetBytes(codeVerifier);
         var hashedBytes = codeVerifierBytes.Sha256();
-        var transformedCodeVerifier = Base64Url.Encode(hashedBytes);
+        var transformedCodeVerifier = Base64Url.EncodeToString(hashedBytes);
 
         return TimeConstantComparer.IsEqual(transformedCodeVerifier.Sha256(), codeChallenge);
     }

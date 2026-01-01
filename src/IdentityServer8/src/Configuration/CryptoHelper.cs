@@ -10,6 +10,7 @@
  copies or substantial portions of the Software.
 */
 
+using System.Buffers.Text;
 using Microsoft.IdentityModel.Tokens;
 
 namespace IdentityServer8.Configuration;
@@ -77,7 +78,7 @@ public static class CryptoHelper
             var leftPart = new byte[size];
             Array.Copy(hash, leftPart, size);
 
-            return Base64Url.Encode(leftPart);
+            return Base64Url.EncodeToString(leftPart);
         }
     }
 

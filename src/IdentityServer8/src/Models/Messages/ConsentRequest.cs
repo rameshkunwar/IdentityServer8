@@ -10,6 +10,8 @@
  copies or substantial portions of the Software.
 */
 
+using System.Buffers.Text;
+
 namespace IdentityServer8.Models;
 
 /// <summary>
@@ -93,7 +95,7 @@ public class ConsentRequest
                 var bytes = Encoding.UTF8.GetBytes(value);
                 var hash = sha.ComputeHash(bytes);
 
-                return Base64Url.Encode(hash);
+                return Base64Url.EncodeToString(hash);
             }
         }
     }

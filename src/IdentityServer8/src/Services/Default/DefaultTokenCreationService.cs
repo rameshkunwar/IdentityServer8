@@ -10,6 +10,7 @@
  copies or substantial portions of the Software.
 */
 
+using System.Buffers.Text;
 using Microsoft.IdentityModel.Tokens;
 
 namespace IdentityServer8.Services;
@@ -98,7 +99,7 @@ public class DefaultTokenCreationService : ITokenCreationService
                 Logger.LogWarning("Certificate {subjectName} has expired on {expiration}", cert.Subject, cert.NotAfter.ToString(CultureInfo.InvariantCulture));
             }
 
-            header["x5t"] = Base64Url.Encode(cert.GetCertHash());
+            header["x5t"] = Base64Url.EncodeToString(cert.GetCertHash());
         }
 
         if (token.Type == TokenTypes.AccessToken)

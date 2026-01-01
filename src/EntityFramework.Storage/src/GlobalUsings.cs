@@ -11,7 +11,7 @@
 */
 
 global using AutoMapper;
-global using IdentityModel;
+global using Duende.IdentityModel;
 global using IdentityServer8.EntityFramework.DbContexts;
 global using IdentityServer8.EntityFramework.Extensions;
 global using IdentityServer8.EntityFramework.Interfaces;

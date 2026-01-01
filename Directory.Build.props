@@ -8,6 +8,8 @@
         <PackageId>HigginsSoft.$(MSBuildProjectName)</PackageId>
         <Title>$(MSBuildProjectName)</Title>
         <ImplicitUsings>enable</ImplicitUsings>
+<!--        this willl be enabled in the future -->
+        <Nullable>annotations</Nullable>
 
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
 

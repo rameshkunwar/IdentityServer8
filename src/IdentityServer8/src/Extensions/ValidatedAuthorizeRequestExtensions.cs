@@ -10,6 +10,8 @@
  copies or substantial portions of the Software.
 */
 
+using System.Buffers.Text;
+
 #pragma warning disable 1591
 
 namespace IdentityServer8.Validation;
@@ -125,6 +127,6 @@ public static class ValidatedAuthorizeRequestExtensions
             hash = sha.ComputeHash(bytes);
         }
 
-        return Base64Url.Encode(hash) + "." + salt;
+        return Base64Url.EncodeToString(hash) + "." + salt;
     }
 }

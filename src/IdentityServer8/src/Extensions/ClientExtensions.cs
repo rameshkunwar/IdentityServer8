@@ -12,7 +12,7 @@
 
 using Microsoft.IdentityModel.Tokens;
 
-namespace IdentityServer8.Models;
+namespace IdentityServer8.Extensions;
 
 /// <summary>
 /// Extension methods for client.
@@ -24,10 +24,8 @@ public static class ClientExtensions
     /// </summary>
     public static bool IsImplicitOnly(this Client client)
     {
-        return client != null &&
-            client.AllowedGrantTypes != null &&
-            client.AllowedGrantTypes.Count == 1 &&
-            client.AllowedGrantTypes.First() == GrantType.Implicit;
+        return client is { AllowedGrantTypes: { Count: 1 } } && 
+               client.AllowedGrantTypes.First() == GrantType.Implicit;
     }
 
     /// <summary>
@@ -58,7 +56,19 @@ public static class ClientExtensions
     {
         return secrets
             .Where(s => s.Type == IdentityServerConstants.SecretTypes.X509CertificateBase64)
-            .Select(s => new X509Certificate2(Convert.FromBase64String(s.Value)))
+            .Select(s => 
+            {
+                try 
+                {
+                    var bytes = Convert.FromBase64String(s.Value);
+                    return X509CertificateLoader.LoadCertificate(bytes);
+                }
+                catch (Exception) 
+                {
+                    // If loading fails, return null so we can filter it out
+                    return null; 
+                }
+            })
             .Where(c => c != null)
             .ToList();
     }
