@@ -16,12 +16,15 @@ class Program
 {
     public static void Main(string[] args)
     {
-        var host = BuildWebHost(args);
+        var host = CreateHostBuilder(args).Build();
         SeedData.EnsureSeedData(host.Services);
     }
-
-    public static IWebHost BuildWebHost(string[] args) =>
-        WebHost.CreateDefaultBuilder(args)
-            .UseStartup<Startup>()
-            .Build();
+    
+    public static IHostBuilder CreateHostBuilder(string[] args) =>
+        Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                // This is the bridge that lets you keep using Startup.cs
+                webBuilder.UseStartup<Startup>();
+            });
 }
