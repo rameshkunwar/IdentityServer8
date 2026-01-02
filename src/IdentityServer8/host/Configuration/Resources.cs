@@ -10,6 +10,8 @@
  copies or substantial portions of the Software.
 */
 
+using Duende.IdentityModel;
+
 namespace IdentityServerHost.Configuration;
 
 public class Resources

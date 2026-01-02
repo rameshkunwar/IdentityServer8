@@ -10,6 +10,7 @@
  copies or substantial portions of the Software.
 */
 
+using Duende.IdentityModel;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace IdentityServerHost.Quickstart.UI;
