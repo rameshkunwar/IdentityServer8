@@ -10,12 +10,12 @@
  copies or substantial portions of the Software.
 */
 
-using IdentityModel;
+using Duende.IdentityModel;
 using IdentityServer8.Models;
 using System.Collections.Generic;
 using static IdentityServer8.IdentityServerConstants;
 
-namespace IdentityServerHost.Configuration;
+namespace SqlServer.Configuration;
 
 public class Resources
 {

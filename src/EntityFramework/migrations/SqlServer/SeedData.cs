@@ -50,7 +50,7 @@ public class SeedData
         if (!context.IdentityResources.Any())
         {
             Console.WriteLine("IdentityResources being populated");
-            foreach (var resource in Resources.IdentityResources)
+            foreach (var resource in Configuration.Resources.IdentityResources)
             {
                 context.IdentityResources.Add(resource.ToEntity());
             }
@@ -64,7 +64,7 @@ public class SeedData
         if (!context.ApiResources.Any())
         {
             Console.WriteLine("ApiResources being populated");
-            foreach (var resource in Resources.ApiResources)
+            foreach (var resource in Configuration.Resources.ApiResources)
             {
                 context.ApiResources.Add(resource.ToEntity());
             }
@@ -78,7 +78,7 @@ public class SeedData
         if (!context.ApiScopes.Any())
         {
             Console.WriteLine("Scopes being populated");
-            foreach (var resource in Resources.ApiScopes)
+            foreach (var resource in Configuration.Resources.ApiScopes)
             {
                 context.ApiScopes.Add(resource.ToEntity());
             }

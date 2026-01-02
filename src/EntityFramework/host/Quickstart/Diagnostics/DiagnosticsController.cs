@@ -10,7 +10,7 @@
  copies or substantial portions of the Software.
 */
 
-namespace IdentityServerHost.Quickstart.UI;
+namespace Host.Quickstart.Diagnostics;
 
 [SecurityHeaders]
 [Authorize]

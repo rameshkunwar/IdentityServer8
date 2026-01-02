@@ -12,7 +12,7 @@
 
 using Microsoft.EntityFrameworkCore;
 
-namespace IdentityServerHost;
+namespace Host;
 
 public class Startup
 {
