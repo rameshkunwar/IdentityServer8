@@ -54,27 +54,27 @@
     <PackageVersion Include="Duende.IdentityModel" Version="8.0.0" />
     <PackageVersion Include="IdentityServer4.KeyManagement" Version="2.1.0" />
     <PackageVersion Include="jQuery" Version="3.7.1" />
-    <PackageVersion Include="jQuery.validation" Version="1.19.5" />
+    <PackageVersion Include="jQuery.validation" Version="1.21.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.Certificate" Version="$(AspnetVersion)" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.5" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.32" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(AspnetVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="$(AspnetMinorVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="10.0.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="$(AspnetMinorVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="$(AspnetVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="$(AspnetVersion)" />
-    <PackageVersion Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Identity.UI" Version="$(AspnetVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="$(AspnetVersion)" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.3.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="$(AspnetVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="$(AspnetVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="$(AspnetVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="$(AspnetVersion)" />
     <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="8.0.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.2.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.3.0" />
     <PackageVersion Include="Microsoft.Data.SqlClient" Version="6.1.3" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1">
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
@@ -107,14 +107,14 @@
     <PackageVersion Include="Microsoft.Extensions.Options" Version="$(AspnetVersion)" />
     <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery" Version="$(AspireVersion)" />
     <PackageVersion Include="Microsoft.Extensions.ServiceDiscovery.Yarp" Version="$(AspireVersion)" />
-    <PackageVersion Include="Microsoft.Identity.Web" Version="1.22.1" />
-    <PackageVersion Include="Microsoft.Identity.Web.UI" Version="1.16.0" />
+    <PackageVersion Include="Microsoft.Identity.Web" Version="4.2.0" />
+    <PackageVersion Include="Microsoft.Identity.Web.UI" Version="4.2.0" />
     <PackageVersion Include="Microsoft.IdentityModel.Logging" Version="8.15.0" />
     <PackageVersion Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="8.15.0" />
     <PackageVersion Include="Microsoft.jQuery.Unobtrusive.Validation" Version="4.0.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
-    <PackageVersion Include="Microsoft.OpenApi" Version="1.6.10" />
-    <PackageVersion Include="Microsoft.Web.LibraryManager.Build" Version="2.1.175" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageVersion Include="Microsoft.OpenApi" Version="3.1.1" />
+    <PackageVersion Include="Microsoft.Web.LibraryManager.Build" Version="3.0.71" />
     <PackageVersion Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.6" />
     <PackageVersion Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="$(AspnetVersion)" />
     <PackageVersion Include="Moq" Version="4.20.70" />
