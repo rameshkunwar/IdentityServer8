@@ -11,7 +11,7 @@
 */
 
 using FluentAssertions;
-using IdentityModel.Client;
+using Duende.IdentityModel.Client;
 using IdentityServer.IntegrationTests.Clients.Setup;
 using IdentityServer8.Extensions;
 using Microsoft.AspNetCore.Hosting;
@@ -123,10 +123,23 @@ public class CustomTokenRequestValidatorClient
     {
         return json.ToObject<Dictionary<string, JsonElement>>();
     }
-    private void ValidateCustomFields(TokenResponse response)
+    //TODO: Unit test
+     private void ValidateCustomFields(TokenResponse response)
     {
-        var fields = GetFields(response.Json);
-        fields["custom"].ToString().Should().Be("custom");
+        // 1. Parse the raw response string into a JsonDocument
+        using var doc = JsonDocument.Parse(response.Raw);
+    
+        // 2. Access the root element 
+        var root = doc.RootElement;
 
+        // 3. Extract the custom field safely
+        if (root.TryGetProperty("custom", out var customField))
+        {
+            customField.GetString().Should().Be("custom");
+        }
+        else 
+        {
+            throw new Exception("Custom field not found in JSON response");
+        }
     }
 }

@@ -10,9 +10,10 @@
  copies or substantial portions of the Software.
 */
 
+using System.Buffers.Text;
 using FluentAssertions;
-using IdentityModel;
-using IdentityModel.Client;
+using Duende.IdentityModel;
+using Duende.IdentityModel.Client;
 using IdentityServer.IntegrationTests.Clients.Setup;
 using IdentityServer8.Extensions;
 using Microsoft.AspNetCore.Hosting;
@@ -22,6 +23,7 @@ using Newtonsoft.Json.Linq;
 using System.Text;
 using System.Text.Json;
 using Xunit;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace IdentityServer.IntegrationTests.Clients;
 
@@ -285,27 +287,84 @@ public class CustomTokenResponseClients
         return responseObject.ToObject<CustomResponseDto>();
     }
 
+    // private Dictionary<string, object> GetFieldsD(TokenResponse response)
+    // {
+    //     return response.Json.ToObject<Dictionary<string, object>>();
+    // }
+
+
+    // private Dictionary<string, JsonElement> GetFields(TokenResponse response)
+    // {
+    //     return GetFields(response.Json);
+    // }
+    //
+    // private Dictionary<string, JsonElement> GetFields(JsonElement json)
+    // {
+    //     return json.ToObject<Dictionary<string, JsonElement>>();
+    // }
     private Dictionary<string, object> GetFieldsD(TokenResponse response)
     {
-        return response.Json.ToObject<Dictionary<string, object>>();
+        // Use the raw response if Json is null/empty
+        if (!response.Json.HasValue)
+        {
+            using var doc = JsonDocument.Parse(response.Raw ?? "{}");
+            return ExtractValues(doc.RootElement);
+        }
+
+        return ExtractValues(response.Json.Value);
     }
 
+    private Dictionary<string, object> ExtractValues(JsonElement element)
+    {
+        var dictionary = new Dictionary<string, object>();
+    
+        foreach (var property in element.EnumerateObject())
+        {
+            dictionary.Add(property.Name, ConvertElement(property.Value));
+        }
+    
+        return dictionary;
+    }
 
+    private object ConvertElement(JsonElement element)
+    {
+        return element.ValueKind switch
+        {
+            JsonValueKind.String => element.GetString()!,
+            JsonValueKind.Number => element.TryGetInt64(out var l) ? l : element.GetDouble(),
+            JsonValueKind.True => true,
+            JsonValueKind.False => false,
+            JsonValueKind.Null => null!,
+            JsonValueKind.Object => ExtractValues(element),
+            JsonValueKind.Array => element.EnumerateArray().Select(ConvertElement).ToList(),
+            _ => element.GetRawText()
+        };
+    }
     private Dictionary<string, JsonElement> GetFields(TokenResponse response)
     {
-        return GetFields(response.Json);
+        // Check if Json is present; if not, parse the Raw string
+        if (response.Json.HasValue)
+        {
+            return GetFields(response.Json.Value);
+        }
+    
+        // Fallback: Parse the raw string if the Json property is empty
+        using var doc = JsonDocument.Parse(response.Raw ?? "{}");
+        return GetFields(doc.RootElement);
     }
 
     private Dictionary<string, JsonElement> GetFields(JsonElement json)
     {
-        return json.ToObject<Dictionary<string, JsonElement>>();
+        // Replacement for .ToObject<T>()
+        return JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(json.GetRawText()) 
+               ?? new Dictionary<string, JsonElement>();
     }
 
     private Dictionary<string, object> GetPayload(TokenResponse response)
     {
         var token = response.AccessToken.Split('.').Skip(1).Take(1).First();
         var dictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(
-            Encoding.UTF8.GetString(Base64Url.Decode(token)));
+            Encoding.UTF8.GetString(Base64Url.DecodeFromChars(token)));
 
         return dictionary;
     }

@@ -10,6 +10,7 @@
  copies or substantial portions of the Software.
 */
 
+using System.Buffers.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -17,13 +18,13 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
-using IdentityModel;
-using IdentityModel.Client;
+using Duende.IdentityModel;
+using Duende.IdentityModel.Client;
 using IdentityServer.IntegrationTests.Clients.Setup;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Xunit;
 
 namespace IdentityServer.IntegrationTests.Clients;
@@ -167,54 +168,71 @@ public class UserInfoEndpointClient
 
     [Fact]
     public async Task Complex_json_should_be_correct()
+{
+    var response = await _client.RequestPasswordTokenAsync(new PasswordTokenRequest
     {
-        var response = await _client.RequestPasswordTokenAsync(new PasswordTokenRequest
-        {
-            Address = TokenEndpoint,
-            ClientId = "roclient",
-            ClientSecret = "secret",
+        Address = TokenEndpoint,
+        ClientId = "roclient",
+        ClientSecret = "secret",
+        Scope = "openid email api1 api4.with.roles roles",
+        UserName = "bob",
+        Password = "bob"
+    });
 
-            Scope = "openid email api1 api4.with.roles roles",
-            UserName = "bob",
-            Password = "bob"
-        });
+    response.IsError.Should().BeFalse();
 
-        response.IsError.Should().BeFalse();
+    // 1. Get the payload as a JsonElement-backed dictionary
+    var payload = GetPayload(response);
 
-        var payload = GetPayload(response);
+    // 2. Validate Scopes (Handling JsonElement array)
+    var scopes = payload["scope"].EnumerateArray().Select(x => x.GetString()).ToArray();
+    scopes.Length.Should().Be(5);
+    scopes.Should().Contain(new[] { "openid", "email", "api1", "api4.with.roles", "roles" });
 
-        var scopes = ((JArray) payload["scope"]).Select(x => x.ToString()).ToArray();
-        scopes.Length.Should().Be(5);
-        scopes.Should().Contain("openid");
-        scopes.Should().Contain("email");
-        scopes.Should().Contain("api1");
-        scopes.Should().Contain("api4.with.roles");
-        scopes.Should().Contain("roles");
+    // 3. Validate Roles
+    var roles = payload["role"].EnumerateArray().Select(x => x.GetString()).ToArray();
+    roles.Length.Should().Be(2);
+    roles.Should().Contain(new[] { "Geek", "Developer" });
 
-        var roles = ((JArray) payload["role"]).Select(x => x.ToString()).ToArray();
-        roles.Length.Should().Be(2);
-        roles.Should().Contain("Geek");
-        roles.Should().Contain("Developer");
-
-        var userInfo = await _client.GetUserInfoAsync(new UserInfoRequest
-        {
-            Address = UserInfoEndpoint,
-            Token = response.AccessToken
-        });
-
-        //roles = ((JArray)userInfo.Json["role"]).Select(x => x.ToString()).ToArray();
-        roles = userInfo.Json.TryGetStringArray("role").ToArray();
-        roles.Length.Should().Be(2);
-        roles.Should().Contain("Geek");
-        roles.Should().Contain("Developer");
-    }
-
-    private Dictionary<string, object> GetPayload(TokenResponse response)
+    var userInfo = await _client.GetUserInfoAsync(new UserInfoRequest
     {
-        var token = response.AccessToken.Split('.').Skip(1).Take(1).First();
-        var dictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(
-            Encoding.UTF8.GetString(Base64Url.Decode(token)));
+        Address = UserInfoEndpoint,
+        Token = response.AccessToken
+    });
 
-        return dictionary;
+    // 4. Validate UserInfo Roles (System.Text.Json way)
+    if (userInfo.Json.HasValue)
+    {
+        if (userInfo.Json.Value.TryGetProperty("role", out var roleProperty))
+        {
+            var userInfoRoles = roleProperty.EnumerateArray().Select(x => x.GetString()).ToArray();
+            userInfoRoles.Length.Should().Be(2);
+            userInfoRoles.Should().Contain("Geek");
+            userInfoRoles.Should().Contain("Developer");
+        }
+        else
+        {
+            Assert.Fail("Role property missing from UserInfo");
+        }
     }
+    else
+    {
+        Assert.Fail("Role property missing from UserInfo");
+    }
+}
+
+private Dictionary<string, JsonElement> GetPayload(TokenResponse response)
+{
+    // Use the optimized JsonWebToken class instead of manual string splitting
+    var handler = new JsonWebTokenHandler();
+    var jwt = handler.ReadJsonWebToken(response.AccessToken);
+
+    // IdentityModel 8.x stores claims as a Dictionary<string, object> 
+    // where 'object' is actually a JsonElement in most modern scenarios.
+    // If your version returns a string, parse it:
+    using var doc = JsonDocument.Parse(jwt.EncodedPayload);
+    
+    return doc.RootElement.EnumerateObject()
+        .ToDictionary(p => p.Name, p => p.Value.Clone());
+}
 }
