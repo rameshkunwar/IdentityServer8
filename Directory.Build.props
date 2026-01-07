@@ -4,7 +4,7 @@
         <TargetFramework>net10.0</TargetFramework>
         <!--always bump /version.json and /docs/conf.py to <Version>X.Y.Z</Version>to keep nuget, build and document versions in sync-->
         <Version>10.0.0</Version>
-		<IdentityServerVersion>10.0.0</IdentityServerVersion>
+		<IdentityServerVersion>10.0.0</IdentityServerVersion>        
         <PackageId>HigginsSoft.$(MSBuildProjectName)</PackageId>
         <Title>$(MSBuildProjectName)</Title>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -14,7 +14,7 @@
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
 
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-        <NoWarn>$(NoWarn);CS0618;SYSLIB0023;SYSLIB0020;EF1001</NoWarn>
+        <NoWarn>$(NoWarn);CS0618;SYSLIB0023;SYSLIB0020;EF1001;SYSLIB1090;SYSLIB1055;SYSLIB1056;SYSLIB1057;SYSLIB1058;SYSLIB1060;SYSLIB1061;SYSLIB1098;SYSLIB1099;SYSLIB1096;SYSLIB1097;SYSLIB1054;SYSLIB1045;</NoWarn>
 
 		<SignAssembly>true</SignAssembly>
 		<AssemblyOriginatorKeyFile>$(SolutionDir)../key.snk</AssemblyOriginatorKeyFile>
@@ -69,9 +69,7 @@
     </PropertyGroup>
 
     <ItemGroup>
- 
-        <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="$(MicrosoftCodeAnalysisNetAnalyzersPackageVersion)" PrivateAssets="All" />
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="$(MicrosoftSourceLinkGitHubPackageVersion)" PrivateAssets="All" />
+        <PackageReference Include="Microsoft.SourceLink.GitHub"  PrivateAssets="All" />
     </ItemGroup>
 
     <ItemGroup>
