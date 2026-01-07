@@ -8,7 +8,7 @@
     <EfVersion>10.0.1</EfVersion>
     <RuntimeVersion>10.0.1</RuntimeVersion>
     <AspireVersion>10.1.0</AspireVersion>
-    <GrpcVersion>2.46.6</GrpcVersion>
+    <GrpcVersion>2.76.0</GrpcVersion>
     <SerilogVersion>10.0.0</SerilogVersion>
     <NoWarn>$(NoWarn);AD0001;ASP0003;ASP0004;ASP0005;ASP0007;ASP0020;ASP0021;ASP0022;ASP0024</NoWarn>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
